@@ -4,11 +4,12 @@ import { assets } from '@/assets/assets';
 import Image from 'next/image';
 import React from 'react';
 import { useAppContext } from '../context/AppContext';
-import axios from 'axios';
 import toast from 'react-hot-toast';
+import { useApi } from '@/app/lib/api';
 
 function ChatLable({ openMenu, setOpenMenu, id, name }) {
   const { fetchUsersChats, chats, setSelectedChat } = useAppContext();
+  const api = useApi();
 
   const selectChat = () => {
     const chatData = chats.find((chat) => chat.id === id);
@@ -20,7 +21,7 @@ function ChatLable({ openMenu, setOpenMenu, id, name }) {
       const newName = prompt('Enter new name');
       if (!newName) return;
 
-      const { data } = await axios.post('/api/chat/rename', {
+      const { data } = await api.post('/api/chat/rename', {
         chatId: id,
         name: newName,
       });
@@ -44,7 +45,7 @@ function ChatLable({ openMenu, setOpenMenu, id, name }) {
       );
       if (!isConfirmed) return;
 
-      const { data } = await axios.post('/api/chat/delete', {
+      const { data } = await api.post('/api/chat/delete', {
         chatId: id,
       });
 
